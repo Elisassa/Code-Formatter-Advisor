@@ -1,0 +1,5 @@
+# .gitignore file to specify which files and directories to ignore in the repository
+venv/               # Ignores the virtual environment folder, usually used to store dependencies
+.env                # Ignores the .env file, which typically contains environment variables
+__pycache__/        # Ignores the __pycache__ folder, which contains compiled Python bytecode
+*.pyc               # Ignores all files with the .pyc extension, which are compiled Python files
