@@ -57,7 +57,7 @@ Code-Formatter-Advisor is a command-line tool that leverages GroqCloud API to an
 
 The **Code-Formatter-Advisor** analyzes your code and provides actionable formatting suggestions to improve readability and consistency. Below is a demonstration of how the tool works:
 
-####Original Unformatted Code:
+#### Original Unformatted Code:
 
 Below is an example of code before using Code-Formatter-Advisor. Notice the issues such as inconsistent indentation, missing type hints, and lack of descriptive comments.
 
