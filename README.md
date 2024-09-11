@@ -53,7 +53,7 @@ Code-Formatter-Advisor is a command-line tool that leverages GroqCloud API to an
     python main.py --version
     ```
 
-### Demonstration
+## 🔍Demonstration
 
 The **Code-Formatter-Advisor** analyzes your code and provides actionable formatting suggestions to improve readability and consistency. Below is a demonstration of how the tool works:
 
@@ -78,8 +78,7 @@ After running the code through Code-Formatter-Advisor, the tool suggests various
 
 
 
-
-## How Code-Formatter-Advisor Was Created
+## 🛠️How Code-Formatter-Advisor Was Created
 
 ### Project Setup
 
