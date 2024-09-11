@@ -57,15 +57,22 @@ Code-Formatter-Advisor is a command-line tool that leverages GroqCloud API to an
 
 The **Code-Formatter-Advisor** analyzes your code and provides actionable formatting suggestions to improve readability and consistency. Below is a demonstration of how the tool works:
 
-#### Input: Unformatted Code
+####Original Unformatted Code:
 
-The initial unformatted code lacks proper structure and readability:
+Below is an example of code before using Code-Formatter-Advisor. Notice the issues such as inconsistent indentation, missing type hints, and lack of descriptive comments.
 
-![Unformatted Code](https://github.com/user-attachments/assets/637390ee-c877-4b15-9bc7-6132e41661e2)
+![image](https://github.com/user-attachments/assets/668a2687-f656-45ff-9df1-680b10d19c03)
 
-#### Output: Suggestions by Code-Formatter-Advisor
 
-After running the code through **Code-Formatter-Advisor**, it provides clear suggestions to enhance the code format, making it more aligned with best practices:
+### Suggested Improvements by Code-Formatter-Advisor:
+
+After running the code through Code-Formatter-Advisor, the tool suggests various improvements such as:
+
+- **Consistent Indentation**: Standardizes indentation to 4 spaces for better readability.
+- **Removal of Extra Spaces**: Removes unnecessary spaces around function arguments, colons, and assignment operators.
+- **Descriptive Function Names**: Renames functions to be more descriptive, like changing `add_numbers` to `sum_numbers`.
+- **Addition of Docstrings**: Adds docstrings to describe the purpose and usage of functions, making the code self-documenting.
+- **Type Hints**: Adds type hints to function arguments and return values to clarify the expected input and output.
 
 ![Formatted Code Suggestions](https://github.com/user-attachments/assets/4c8b24ea-668a-4461-8cd4-16278cbfeef0)
 
