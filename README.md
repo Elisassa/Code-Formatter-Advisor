@@ -2,7 +2,7 @@
 
 Code-Formatter-Advisor is a command-line tool designed to provide code formatting and improvement suggestions. It analyzes your code and recommends changes to enhance readability, consistency, and adherence to best practices.
 
-##📜Description
+## 📜Description
 
 - Provides code formatting suggestions based on best practices.
 - Supports multiple programming languages.
