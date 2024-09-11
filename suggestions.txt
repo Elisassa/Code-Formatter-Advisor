@@ -1,0 +1,40 @@
+Here are some code formatting and improvement suggestions:
+
+```python
+# A simple Python script with improved formatting
+
+def greet(name):
+    """
+    A function to greet a person by name.
+
+    :param name: The person's name.
+    :return: None
+    """
+    print(f"Hello, {name}!")  # This line is properly formatted
+
+
+def add_numbers(a, b):
+    """
+    A function to add two numbers.
+
+    :param a: The first number.
+    :param b: The second number.
+    :return: The sum of the two numbers.
+    """
+    result = a + b
+    return result
+
+
+greet("World")
+
+# Calling the add_numbers function with some test values
+print(add_numbers(5, 10))
+```
+
+Here are the changes I made:
+
+1. Added a docstring for each function to describe its purpose, parameters, and return value.
+2. Improved indentation and whitespace consistency.
+3. Changed the argument style of the `add_numbers` function from `(a, b) :` to `(a, b)`.
+4. Changed the capitalization of the first letter of each docstring.
+5. Added a blank line between functions to improve readability.
