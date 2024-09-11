@@ -1,6 +1,6 @@
 # Code-Formatter-Advisor
 
-Code-Formatter-Advisor is a command-line tool designed to provide code formatting and improvement suggestions. It analyzes your code and recommends changes to enhance readability, consistency, and adherence to best practices.
+Code-Formatter-Advisor is a command-line tool that leverages GroqCloud API to analyze code and provide formatting improvement suggestions. It offers a streamlined interface for specifying input files, customizing outputs, and enhancing code readability and consistency. The tool supports multiple programming languages and integrates seamlessly into your workflow by delivering suggestions directly in the terminal or saving them to a file.
 
 ## 📜Description
 
