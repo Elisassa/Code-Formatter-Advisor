@@ -24,7 +24,17 @@ def analyze_code(file_path, output_file=None):
             messages=[
                 {
                     "role": "user",
-                    "content": f"Provide code formatting and improvement suggestions for the following code:\n\n{code}",  # The prompt sent to the model
+                    #prompt!!!
+                    "content": f"""Analyze the following code and provide detailed formatting and improvement suggestions. Focus on the following aspects:
+                    1. Standardize indentation and spacing for better readability.
+                    2. Suggest descriptive and meaningful function and variable names.
+                    3. Add appropriate docstrings to functions to explain their purpose, inputs, and outputs.
+                    4. Include type hints for function arguments and return values to enhance code clarity.
+                    5. Highlight any unused imports or redundant code that can be removed.
+                    6. Suggest improvements to make the code adhere to best practices and improve its overall structure.
+
+                    Here is the code:{code}
+                    """,
                 }
             ],
             model="mixtral-8x7b-32768",   
