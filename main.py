@@ -13,7 +13,7 @@ my_api_key = os.environ.get("GROQCLOUD_API_KEY")
 client = Groq(api_key=my_api_key) #use my api key to send request to  Groq
 
 
-def analyze_code(file_path, output_file=None):
+def analyze_code(file_path, args):
     try:
         # Open and read the code file
         with open(file_path, 'r') as file:# use with... as syntax so no need to manually close
@@ -43,8 +43,14 @@ def analyze_code(file_path, output_file=None):
         # Retrieve from api see groqcloud response json file
         suggestions = chat_completion.choices[0].message.content.strip() #use strip remove others space
 
+        # Append the token usage information if the --token-usage flag is provided
+        if args.token_usage:
+            tokens = f"Message Token: {chat_completion.usage.prompt_tokens}\nResponse Token: {chat_completion.usage.completion_tokens}"
+            suggestions = f"{suggestions}\n\n{tokens}"
+
         # Save suggestions to a file or print to the terminal
-        if output_file:
+        if args.output:
+            output_file = args.output
             with open(output_file, 'w') as f:
                 f.write(suggestions)
             print(f"Suggestions have been written to {output_file}")
@@ -59,6 +65,7 @@ def main():
     parser = argparse.ArgumentParser(description="CodeFormatterAdvisor: A tool to provide code formatting improvement suggestions")
     parser.add_argument('--version', '-v', action='version', version='CodeFormatterAdvisor 0.1')  # Version information
     parser.add_argument('--output', '-o', type=str, help='Specify the output file name')  # Output file option
+    parser.add_argument('--token-usage', '-t', action='store_true', help='Display token information along with the improved code')  # Token usage option
     parser.add_argument('files', nargs='+', help='The code files to be analyzed')  # Accept one or more input files
     args = parser.parse_args() 
 
@@ -66,7 +73,7 @@ def main():
     for file_path in args.files:
         if os.path.exists(file_path):
             print(f"Analyzing file: {file_path}")
-            analyze_code(file_path, args.output)
+            analyze_code(file_path, args)
         else:
             print(f"File {file_path} does not exist")
 
