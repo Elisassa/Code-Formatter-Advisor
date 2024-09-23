@@ -1,5 +1,4 @@
 import os  
-import time
 from dotenv import load_dotenv  # For loading environment variables from a .env file
 import argparse  # For parsing command line arguments
 from groq import Groq  # GroqCloud API client
@@ -20,11 +19,10 @@ def analyze_code(file_path, args):
         with open(file_path, 'r') as file:# use with... as syntax so no need to manually close
             code = file.read()  
 
-        # count file type
-        file_size = os.path.getsize(file_path)
-        print(f"The file {file_path} has a size of {file_size} bytes.")
-
-       
+        # If the --file-size argument is provided, calculate and display the size of the file
+        if args.file_size:
+            file_size = os.path.getsize(file_path)
+            print(f"The file {file_path} has a size of {file_size} bytes.")
 
         # Send a chat completion request to get formatting suggestions
         chat_completion = client.chat.completions.create( #.create same as js .then use for promise
@@ -74,6 +72,7 @@ def main():
     parser.add_argument('--version', '-v', action='version', version='CodeFormatterAdvisor 0.1')  # Version information
     parser.add_argument('--output', '-o', type=str, help='Specify the output file name')  # Output file option
     parser.add_argument('--token-usage', '-t', action='store_true', help='Display token information along with the improved code')  # Token usage option
+    parser.add_argument('--file-size', '-s', action='store_true', help='Calculate and display file size before analysis')  # Enable file size calculation
     parser.add_argument('files', nargs='+', help='The code files to be analyzed')  # Accept one or more input files
     args = parser.parse_args() 
 
