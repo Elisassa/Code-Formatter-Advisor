@@ -1,4 +1,5 @@
 import os  
+import time
 from dotenv import load_dotenv  # For loading environment variables from a .env file
 import argparse  # For parsing command line arguments
 from groq import Groq  # GroqCloud API client
@@ -15,6 +16,8 @@ client = Groq(api_key=my_api_key) #use my api key to send request to  Groq
 
 def analyze_code(file_path, args):
     try:
+        if args.time:#start time
+            start_time = time.time()
         # Open and read the code file
         with open(file_path, 'r') as file:# use with... as syntax so no need to manually close
             code = file.read()  
@@ -63,6 +66,12 @@ def analyze_code(file_path, args):
             print(f"\nFormatting Suggestions:\n{suggestions}")
         
 
+        #record the time
+        if args.time:
+            end_time = time.time()
+            execution_time = end_time - start_time
+            print(f"Analysis of {file_path} completed in {execution_time:.2f} seconds.")
+
     except Exception as err:
         print(f"An error occurred: {err}")
 
@@ -74,6 +83,7 @@ def main():
     parser.add_argument('--token-usage', '-t', action='store_true', help='Display token information along with the improved code')  # Token usage option
     parser.add_argument('--file-size', '-s', action='store_true', help='Calculate and display file size before analysis')  # Enable file size calculation
     parser.add_argument('files', nargs='+', help='The code files to be analyzed')  # Accept one or more input files
+    parser.add_argument('--time', action='store_true', help='Measure and display execution time for the analysis')  # Enable time measurement
     args = parser.parse_args() 
 
     # Iterate through each input file and analyze it
