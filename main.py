@@ -1,4 +1,5 @@
 import os  
+import time
 from dotenv import load_dotenv  # For loading environment variables from a .env file
 import argparse  # For parsing command line arguments
 from groq import Groq  # GroqCloud API client
@@ -18,6 +19,12 @@ def analyze_code(file_path, args):
         # Open and read the code file
         with open(file_path, 'r') as file:# use with... as syntax so no need to manually close
             code = file.read()  
+
+        # count file type
+        file_size = os.path.getsize(file_path)
+        print(f"The file {file_path} has a size of {file_size} bytes.")
+
+       
 
         # Send a chat completion request to get formatting suggestions
         chat_completion = client.chat.completions.create( #.create same as js .then use for promise
@@ -56,6 +63,7 @@ def analyze_code(file_path, args):
             print(f"Suggestions have been written to {output_file}")
         else:
             print(f"\nFormatting Suggestions:\n{suggestions}")
+        
 
     except Exception as err:
         print(f"An error occurred: {err}")
