@@ -105,13 +105,13 @@ def main():
 
     # override the default values with the values from the toml file
     if toml_dict:
-        if "output" in toml_dict:
+        if not args.output and "output" in toml_dict:
             args.output = toml_dict["output"]
-        if "token-usage" in toml_dict:
+        if not args.token_usage and "token-usage" in toml_dict:
             args.token_usage = toml_dict["token-usage"]
-        if "file-size" in toml_dict:
+        if not args.file_size and "file-size" in toml_dict:
             args.file_size = toml_dict["file-size"]
-        if "time" in toml_dict:
+        if not args.time and "time" in toml_dict:
             args.time = toml_dict["time"]
 
     # Iterate through each input file and analyze it
