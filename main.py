@@ -3,6 +3,7 @@ import time
 from dotenv import load_dotenv  # For loading environment variables from a .env file
 import argparse  # For parsing command line arguments
 from groq import Groq  # GroqCloud API client
+import tomli  # For parsing TOML configuration files
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -76,6 +77,22 @@ def analyze_code(file_path, args):
         print(f"An error occurred: {err}")
 
 def main():
+
+    # check if toml file is present
+    toml_file_path = "./.advisor-config.toml"
+    toml_dict = {}
+    if os.path.exists(toml_file_path):
+        print(f"{toml_file_path} is present. Parsing now")
+        with open(toml_file_path, "rb") as f:
+            try:
+                toml_dict = tomli.load(f)
+            except tomli.TOMLDecodeError:
+                print(toml_file_path, "toml file is not valid")
+                return -1
+    else:
+        print(f"{toml_file_path} is not present. Ignoring the TOML configs")
+
+
     # Set up command line argument parsing
     parser = argparse.ArgumentParser(description="CodeFormatterAdvisor: A tool to provide code formatting improvement suggestions")
     parser.add_argument('--version', '-v', action='version', version='CodeFormatterAdvisor 0.1')  # Version information
@@ -85,6 +102,17 @@ def main():
     parser.add_argument('files', nargs='+', help='The code files to be analyzed')  # Accept one or more input files
     parser.add_argument('--time', action='store_true', help='Measure and display execution time for the analysis')  # Enable time measurement
     args = parser.parse_args() 
+
+    # override the default values with the values from the toml file
+    if toml_dict:
+        if not args.output and "output" in toml_dict:
+            args.output = toml_dict["output"]
+        if not args.token_usage and "token-usage" in toml_dict:
+            args.token_usage = toml_dict["token-usage"]
+        if not args.file_size and "file-size" in toml_dict:
+            args.file_size = toml_dict["file-size"]
+        if not args.time and "time" in toml_dict:
+            args.time = toml_dict["time"]
 
     # Iterate through each input file and analyze it
     for file_path in args.files:
