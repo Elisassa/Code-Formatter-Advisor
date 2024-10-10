@@ -1,5 +1,6 @@
 import os  
 import time
+import logging
 from dotenv import load_dotenv  # For loading environment variables from a .env file
 import argparse  # For parsing command line arguments
 from groq import Groq  # GroqCloud API client
@@ -8,49 +9,73 @@ import tomli  # For parsing TOML configuration files
 # Load environment variables from a .env file
 load_dotenv()
 
-# get mt api key from .env file
+# Get API key from .env file
 my_api_key = os.environ.get("GROQCLOUD_API_KEY")
-#print(f"Loaded API Key: {api_key}") 
 
-client = Groq(api_key=my_api_key) #use my api key to send request to  Groq
+client = Groq(api_key=my_api_key)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
+# Function to read the code file
+def read_code_file(file_path):
+    with open(file_path, 'r') as file:
+        code = file.read()
+    return code
+
+
+# Function to send a chat completion request
+def send_chat_completion_request(code):
+    return client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": f"""Analyze the following code and provide detailed formatting and improvement suggestions. Focus on the following aspects:
+                1. Standardize indentation and spacing for better readability.
+                2. Suggest descriptive and meaningful function and variable names.
+                3. Add appropriate docstrings to functions to explain their purpose, inputs, and outputs.
+                4. Include type hints for function arguments and return values to enhance code clarity.
+                5. Highlight any unused imports or redundant code that can be removed.
+                6. Suggest improvements to make the code adhere to best practices and improve its overall structure.
+
+                Here is the code:{code}
+                """,
+            }
+        ],
+        model="mixtral-8x7b-32768",
+    )
+
+
+# Measure execution time
+def measure_execution_time(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        logging.info(f"Execution time: {end_time - start_time:.2f} seconds.")
+        return result
+    return wrapper
+
+
+@measure_execution_time
 def analyze_code(file_path, args):
     try:
-        if args.time:#start time
-            start_time = time.time()
-        # Open and read the code file
-        with open(file_path, 'r') as file:# use with... as syntax so no need to manually close
-            code = file.read()  
+        logging.info(f"Starting analysis for file: {file_path}")
 
-        # If the --file-size argument is provided, calculate and display the size of the file
+        # Open and read the code file
+        code = read_code_file(file_path)
+
+        # Log the file size if required
         if args.file_size:
             file_size = os.path.getsize(file_path)
-            print(f"The file {file_path} has a size of {file_size} bytes.")
+            logging.info(f"The file {file_path} has a size of {file_size} bytes.")
 
         # Send a chat completion request to get formatting suggestions
-        chat_completion = client.chat.completions.create( #.create same as js .then use for promise
-            messages=[
-                {
-                    "role": "user",
-                    #prompt!!!
-                    "content": f"""Analyze the following code and provide detailed formatting and improvement suggestions. Focus on the following aspects:
-                    1. Standardize indentation and spacing for better readability.
-                    2. Suggest descriptive and meaningful function and variable names.
-                    3. Add appropriate docstrings to functions to explain their purpose, inputs, and outputs.
-                    4. Include type hints for function arguments and return values to enhance code clarity.
-                    5. Highlight any unused imports or redundant code that can be removed.
-                    6. Suggest improvements to make the code adhere to best practices and improve its overall structure.
+        chat_completion = send_chat_completion_request(code)
 
-                    Here is the code:{code}
-                    """,
-                }
-            ],
-            model="mixtral-8x7b-32768",   
-        )
-
-        # Retrieve from api see groqcloud response json file
-        suggestions = chat_completion.choices[0].message.content.strip() #use strip remove others space
+        # Retrieve suggestions from the API
+        suggestions = chat_completion.choices[0].message.content.strip()
 
         # Append the token usage information if the --token-usage flag is provided
         if args.token_usage:
@@ -62,36 +87,28 @@ def analyze_code(file_path, args):
             output_file = args.output
             with open(output_file, 'w') as f:
                 f.write(suggestions)
-            print(f"Suggestions have been written to {output_file}")
+            logging.info(f"Suggestions have been written to {output_file}")
         else:
-            print(f"\nFormatting Suggestions:\n{suggestions}")
-        
-
-        #record the time
-        if args.time:
-            end_time = time.time()
-            execution_time = end_time - start_time
-            print(f"Analysis of {file_path} completed in {execution_time:.2f} seconds.")
+            logging.info(f"\nFormatting Suggestions:\n{suggestions}")
 
     except Exception as err:
-        print(f"An error occurred: {err}")
+        logging.error(f"An error occurred while analyzing the code: {err}")
+
 
 def main():
-
-    # check if toml file is present
+    # Check if toml file is present
     toml_file_path = "./.advisor-config.toml"
     toml_dict = {}
     if os.path.exists(toml_file_path):
-        print(f"{toml_file_path} is present. Parsing now")
+        logging.info(f"{toml_file_path} is present. Parsing now")
         with open(toml_file_path, "rb") as f:
             try:
                 toml_dict = tomli.load(f)
             except tomli.TOMLDecodeError:
-                print(toml_file_path, "toml file is not valid")
+                logging.error(f"{toml_file_path} is not a valid TOML file")
                 return -1
     else:
-        print(f"{toml_file_path} is not present. Ignoring the TOML configs")
-
+        logging.warning(f"{toml_file_path} is not present. Ignoring the TOML configs")
 
     # Set up command line argument parsing
     parser = argparse.ArgumentParser(description="CodeFormatterAdvisor: A tool to provide code formatting improvement suggestions")
@@ -101,9 +118,9 @@ def main():
     parser.add_argument('--file-size', '-s', action='store_true', help='Calculate and display file size before analysis')  # Enable file size calculation
     parser.add_argument('files', nargs='+', help='The code files to be analyzed')  # Accept one or more input files
     parser.add_argument('--time', action='store_true', help='Measure and display execution time for the analysis')  # Enable time measurement
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
-    # override the default values with the values from the toml file
+    # Override the default values with the values from the toml file
     if toml_dict:
         if not args.output and "output" in toml_dict:
             args.output = toml_dict["output"]
@@ -117,10 +134,10 @@ def main():
     # Iterate through each input file and analyze it
     for file_path in args.files:
         if os.path.exists(file_path):
-            print(f"Analyzing file: {file_path}")
             analyze_code(file_path, args)
         else:
-            print(f"File {file_path} does not exist")
+            logging.error(f"File {file_path} does not exist")
+
 
 if __name__ == "__main__":
     main()  # Run the main function
