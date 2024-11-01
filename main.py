@@ -1,18 +1,13 @@
-import os  
-import time
+import os
 import logging
+import argparse
+import tomli
 from dotenv import load_dotenv  # For loading environment variables from a .env file
-import argparse  # For parsing command line arguments
-from groq import Groq  # GroqCloud API client
-import tomli  # For parsing TOML configuration files
+from analyzer import analyze_code
+from utils import measure_execution_time
 
 # Load environment variables from a .env file
 load_dotenv()
-
-# Get API key from .env file
-my_api_key = os.environ.get("GROQCLOUD_API_KEY")
-
-client = Groq(api_key=my_api_key)
 
 # Configure logging
 logging.basicConfig(
@@ -20,83 +15,7 @@ logging.basicConfig(
 )
 
 
-# Function to read the code file
-def read_code_file(file_path):
-    with open(file_path, 'r') as file:
-        code = file.read()
-    return code
-
-
-# Function to send a chat completion request
-def send_chat_completion_request(code):
-    return client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": f"""Analyze the following code and provide detailed formatting and improvement suggestions. Focus on the following aspects:
-                1. Standardize indentation and spacing for better readability.
-                2. Suggest descriptive and meaningful function and variable names.
-                3. Add appropriate docstrings to functions to explain their purpose, inputs, and outputs.
-                4. Include type hints for function arguments and return values to enhance code clarity.
-                5. Highlight any unused imports or redundant code that can be removed.
-                6. Suggest improvements to make the code adhere to best practices and improve its overall structure.
-
-                Here is the code:{code}
-                """,
-            }
-        ],
-        model="mixtral-8x7b-32768",
-    )
-
-
-# Measure execution time
-def measure_execution_time(func):
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        logging.info(f"Execution time: {end_time - start_time:.2f} seconds.")
-        return result
-    return wrapper
-
-
 @measure_execution_time
-def analyze_code(file_path, args):
-    try:
-        logging.info(f"Starting analysis for file: {file_path}")
-
-        # Open and read the code file
-        code = read_code_file(file_path)
-
-        # Log the file size if required
-        if args.file_size:
-            file_size = os.path.getsize(file_path)
-            logging.info(f"The file {file_path} has a size of {file_size} bytes.")
-
-        # Send a chat completion request to get formatting suggestions
-        chat_completion = send_chat_completion_request(code)
-
-        # Retrieve suggestions from the API
-        suggestions = chat_completion.choices[0].message.content.strip()
-
-        # Append the token usage information if the --token-usage flag is provided
-        if args.token_usage:
-            tokens = f"Message Token: {chat_completion.usage.prompt_tokens}\nResponse Token: {chat_completion.usage.completion_tokens}"
-            suggestions = f"{suggestions}\n\n{tokens}"
-
-        # Save suggestions to a file or print to the terminal
-        if args.output:
-            output_file = args.output
-            with open(output_file, 'w') as f:
-                f.write(suggestions)
-            logging.info(f"Suggestions have been written to {output_file}")
-        else:
-            logging.info(f"\nFormatting Suggestions:\n{suggestions}")
-
-    except Exception as err:
-        logging.error(f"An error occurred while analyzing the code: {err}")
-
-
 def main():
     # Check if toml file is present
     toml_file_path = "./.advisor-config.toml"

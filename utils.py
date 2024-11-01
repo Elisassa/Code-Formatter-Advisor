@@ -11,7 +11,6 @@ my_api_key = os.environ.get("GROQCLOUD_API_KEY")
 
 client = Groq(api_key=my_api_key)
 
-
 # Measure execution time
 def measure_execution_time(func):
     def wrapper(*args, **kwargs):
@@ -20,16 +19,13 @@ def measure_execution_time(func):
         end_time = time.time()
         logging.info(f"Execution time: {end_time - start_time:.2f} seconds.")
         return result
-
     return wrapper
-
 
 # Function to read the code file
 def read_code_file(file_path):
     with open(file_path, 'r') as file:
         code = file.read()
     return code
-
 
 # Function to send a chat completion request
 def send_chat_completion_request(code):
