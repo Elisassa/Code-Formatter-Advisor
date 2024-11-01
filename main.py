@@ -15,7 +15,9 @@ my_api_key = os.environ.get("GROQCLOUD_API_KEY")
 client = Groq(api_key=my_api_key)
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 
 # Function to read the code file
@@ -111,13 +113,35 @@ def main():
         logging.warning(f"{toml_file_path} is not present. Ignoring the TOML configs")
 
     # Set up command line argument parsing
-    parser = argparse.ArgumentParser(description="CodeFormatterAdvisor: A tool to provide code formatting improvement suggestions")
-    parser.add_argument('--version', '-v', action='version', version='CodeFormatterAdvisor 0.1')  # Version information
-    parser.add_argument('--output', '-o', type=str, help='Specify the output file name')  # Output file option
-    parser.add_argument('--token-usage', '-t', action='store_true', help='Display token information along with the improved code')  # Token usage option
-    parser.add_argument('--file-size', '-s', action='store_true', help='Calculate and display file size before analysis')  # Enable file size calculation
-    parser.add_argument('files', nargs='+', help='The code files to be analyzed')  # Accept one or more input files
-    parser.add_argument('--time', action='store_true', help='Measure and display execution time for the analysis')  # Enable time measurement
+    parser = argparse.ArgumentParser(
+        description="CodeFormatterAdvisor: A tool to provide code formatting improvement suggestions"
+    )
+    parser.add_argument(
+        '--version', '-v', action='version', version='CodeFormatterAdvisor 0.1'
+    )  # Version information
+    parser.add_argument(
+        '--output', '-o', type=str, help='Specify the output file name'
+    )  # Output file option
+    parser.add_argument(
+        '--token-usage',
+        '-t',
+        action='store_true',
+        help='Display token information along with the improved code',
+    )  # Token usage option
+    parser.add_argument(
+        '--file-size',
+        '-s',
+        action='store_true',
+        help='Calculate and display file size before analysis',
+    )  # Enable file size calculation
+    parser.add_argument(
+        'files', nargs='+', help='The code files to be analyzed'
+    )  # Accept one or more input files
+    parser.add_argument(
+        '--time',
+        action='store_true',
+        help='Measure and display execution time for the analysis',
+    )  # Enable time measurement
     args = parser.parse_args()
 
     # Override the default values with the values from the toml file
