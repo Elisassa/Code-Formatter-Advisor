@@ -4,6 +4,7 @@ os.environ['GROQ_API_KEY'] = 'dummy_key'
 import pytest
 from unittest.mock import patch, MagicMock
 from analyzer import analyze_code
+from utils import measure_execution_time
 import logging
 
 
@@ -150,3 +151,16 @@ def test_analyze_code_with_llm_rate_limit(mock_read_code_file, mock_send_chat_co
 
     # Check that rate limit error message is logged
     assert any("Rate limit exceeded" in record.message for record in caplog.records)
+
+
+@measure_execution_time
+def sample_function():
+    return "Sample Output"
+
+def test_measure_execution_time(caplog):
+    with caplog.at_level(logging.INFO):
+        result = sample_function()
+
+    assert result == "Sample Output"
+    assert any("Execution time" in record.message for record in caplog.records)
+
