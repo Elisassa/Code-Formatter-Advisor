@@ -63,7 +63,6 @@ Below is an example of code before using Code-Formatter-Advisor. Notice the issu
 
 ![image](https://github.com/user-attachments/assets/668a2687-f656-45ff-9df1-680b10d19c03)
 
-
 ### Suggested Improvements by Code-Formatter-Advisor:
 
 After running the code through Code-Formatter-Advisor, the tool suggests various improvements such as:
@@ -75,8 +74,6 @@ After running the code through Code-Formatter-Advisor, the tool suggests various
 - **Type Hints**: Adds type hints to function arguments and return values to clarify the expected input and output.
 
 ![Formatted Code Suggestions](https://github.com/user-attachments/assets/4c8b24ea-668a-4461-8cd4-16278cbfeef0)
-
-
 
 ## 🛠️How Code-Formatter-Advisor Was Created
 
@@ -90,7 +87,4 @@ After running the code through Code-Formatter-Advisor, the tool suggests various
    - The main logic is implemented in `main.py`, which handles reading files, interacting with the code formatting API, and processing user inputs.
    - `argparse` is used to handle command-line arguments, allowing users to specify files, output locations, and other options.
    - A custom API client (`Groq`) was integrated to analyze code and provide formatting suggestions.
-
-
-
 
