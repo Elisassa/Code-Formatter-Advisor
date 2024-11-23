@@ -11,6 +11,16 @@ Code-Formatter-Advisor is a command-line tool that leverages GroqCloud API to an
 
 ## ⚙️Installation
 
+### Option 1: Install via PyPI (Recommended)
+
+You can install Code-Formatter-Advisor directly from PyPI using pip:
+
+```bash
+pip install code-formatter-advisor
+```
+
+### Option 2: Install from Source
+
 1. Clone the repository:
     ```bash
     git clone https://github.com/Elisassa/Code-Formatter-Advisor.git
@@ -28,7 +38,7 @@ Code-Formatter-Advisor is a command-line tool that leverages GroqCloud API to an
     pip install -r requirements.txt
     ```
 
-## 📝Usage 
+## 📝Usage
 
 ### Command-Line Arguments
 
@@ -38,19 +48,38 @@ Code-Formatter-Advisor is a command-line tool that leverages GroqCloud API to an
 
 ### Example Commands
 
-1. Analyze a single file and display suggestions in the terminal:
+1. **Analyze a single file and display suggestions in the terminal**:
     ```bash
-    python main.py test.py
+    code-formatter-advisor test.py
     ```
 
-2. Analyze multiple files and save suggestions to an output file:
+2. **Analyze multiple files and save suggestions to an output file**:
     ```bash
-    python main.py test1.py test2.py --output suggestions.txt
+    code-formatter-advisor test1.py test2.py --output suggestions.txt
     ```
 
-3. Check the version of the tool:
+3. **Check the version of the tool**:
     ```bash
-    python main.py --version
+    code-formatter-advisor --version
+    ```
+
+### Usage After Installing via PyPI
+
+If you installed Code-Formatter-Advisor using pip, you can simply run the following commands from anywhere:
+
+1. **Analyze a single file and display suggestions in the terminal**:
+    ```bash
+    code-formatter-advisor test.py
+    ```
+
+2. **Analyze multiple files and save suggestions to an output file**:
+    ```bash
+    code-formatter-advisor test1.py test2.py --output suggestions.txt
+    ```
+
+3. **Check the version of the tool**:
+    ```bash
+    code-formatter-advisor --version
     ```
 
 ## 🔍Demonstration
@@ -87,4 +116,32 @@ After running the code through Code-Formatter-Advisor, the tool suggests various
    - The main logic is implemented in `main.py`, which handles reading files, interacting with the code formatting API, and processing user inputs.
    - `argparse` is used to handle command-line arguments, allowing users to specify files, output locations, and other options.
    - A custom API client (`Groq`) was integrated to analyze code and provide formatting suggestions.
+
+## 🚀 Release Information
+
+The package is available on PyPI and can be installed via:
+```bash
+pip install code-formatter-advisor
+```
+
+To view the source code, report issues, or contribute to the project, please visit the GitHub repository:
+[Code-Formatter-Advisor on GitHub](https://github.com/Elisassa/Code-Formatter-Advisor)
+
+### Versioning
+
+The current version is `v1.0.0`. The versioning follows [Semantic Versioning](https://semver.org/), and any new features, bug fixes, or changes will be released accordingly.
+
+## 🛠️ How to Use the Release
+
+1. **Install the Package**: Users can install the package from PyPI using pip.
+2. **Run the Command**: Use the `code-formatter-advisor` command followed by the file(s) you want to analyze.
+3. **Follow the Suggestions**: The tool provides suggestions to improve code formatting, which can be seen in the terminal or saved to a file.
+
+## 🧑‍💻 User Feedback and Updates
+
+User testing was conducted to ensure that the installation process and usage instructions were straightforward. Feedback from testers helped refine the README and the overall user experience. If you encounter any issues, feel free to create an issue on GitHub.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
